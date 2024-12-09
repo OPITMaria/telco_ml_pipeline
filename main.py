@@ -33,5 +33,7 @@ df_test_internet = splitter.revert_to_booleans(df_test_internet)
 df_train_phone = splitter.revert_to_booleans(df_train_phone)
 df_test_phone = splitter.revert_to_booleans(df_test_phone)
 
-# Print results
-print(df_train_internet.head())
+df_train_internet.to_csv('preprocessed_data/df_train_internet.csv', index = False)
+df_test_internet.to_csv('preprocessed_data/df_test_internet.csv', index = False)
+df_train_phone.to_csv('preprocessed_data/df_train_phone.csv', index = False)
+df_test_phone.to_csv('preprocessed_data/df_test_phone.csv', index = False)
