@@ -21,7 +21,7 @@ df_internet.columns = df_internet.columns.str.lower().str.replace(' ', '_')
 df_phone.columns = df_phone.columns.str.lower().str.replace(' ', '_')
 
 # Split and process data
-splitter = DataSplitter(df_internet, df_phone)
+splitter = DataSplitter(df_internet, df_phone, 0.2)
 df_train_internet, df_test_internet, df_train_phone, df_test_phone = splitter.train_test_split()
 
 # Impute and revert to booleans

@@ -82,25 +82,45 @@ class DataPreprocessor:
         return processed_df
 
 class DataSplitter:
-    def __init__(self, df_internet, df_phone):
+    def __init__(self, df_internet, df_phone, test_size: float):
         self.df_internet = df_internet
         self.df_phone = df_phone
         self.num_col = ['tenure', 'totalcharges', 'monthlycharges']
         self.target = 'churn'
+        self.test_size = test_size
     
     def train_test_split(self):
-        """Split data into train and test sets"""
-        df_train_internet, df_test_internet = train_test_split(
-            self.df_internet, 
+        common_index = self.df_phone.index.intersection(self.df_internet.index)
+        df_phone_internet_common_train = self.df_phone.loc[common_index]
+        y = df_phone_internet_common_train[self.target]
+        train_index, test_index = train_test_split(common_index, test_size=0.2, stratify=y, random_state=42)
+
+        df_phone_common_train = self.df_phone.loc[train_index]
+        df_internet_common_train = self.df_internet.loc[train_index]
+        df_phone_common_test = self.df_phone.loc[test_index]
+        df_internet_common_test = self.df_internet.loc[test_index]
+
+        df_phone_only = self.df_phone.drop(index = common_index)
+        df_internet_only = self.df_internet.drop(index = common_index)
+
+        df_phone_only_train, df_phone_only_test = train_test_split(
+            df_phone_only, 
             test_size=0.2, 
-            stratify=self.df_internet[self.target]
+            stratify=df_phone_only[self.target],
+            random_state=42
         )
-        
-        df_train_phone, df_test_phone = train_test_split(
-            self.df_phone, 
+
+        df_internet_only_train, df_internet_only_test = train_test_split(
+            df_internet_only, 
             test_size=0.2, 
-            stratify=self.df_phone[self.target]
+            stratify=df_internet_only[self.target],
+            random_state=42
         )
+
+        df_train_internet = pd.concat([df_internet_common_train, df_internet_only_train])
+        df_test_internet = pd.concat([df_internet_common_test, df_internet_only_test])
+        df_train_phone = pd.concat([df_phone_common_train, df_phone_only_train])
+        df_test_phone = pd.concat([df_phone_common_test, df_phone_only_test])
         
         return df_train_internet, df_test_internet, df_train_phone, df_test_phone
     
