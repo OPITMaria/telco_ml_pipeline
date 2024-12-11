@@ -20,6 +20,9 @@ class DataLoader:
         
         # Convert SeniorCitizen to Yes/No
         self.df['SeniorCitizen'] = self.df['SeniorCitizen'].map({1: 'Yes', 0: 'No'}).astype('object')
+
+        # tenure as float
+        self.df['tenure'] = self.df['tenure'].astype('float')
         
         return self.df
     
