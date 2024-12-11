@@ -40,7 +40,7 @@ class DataLoader:
 class DataPreprocessor:
     def __init__(self, df):
         self.df = df
-        self.internet_service_cols = ['InternetService', 'OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
+        self.internet_service_cols = ['OnlineSecurity', 'OnlineBackup', 'DeviceProtection', 'TechSupport', 'StreamingTV', 'StreamingMovies']
         self.phone_service_cols = ['MultipleLines']
     
     def split_by_service(self):
